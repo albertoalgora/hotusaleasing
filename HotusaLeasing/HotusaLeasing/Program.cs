@@ -1,4 +1,4 @@
-﻿using Algosoft;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -7,16 +7,88 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
+
 
 namespace HotusaLeasing
 {
    
     public class Program
     {
-        static logger log = new logger("Log\\logger_" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "_"));
+
+
+        public static string _ficheroEntrada = string.Empty;
+        
+
+        public static Logger log = new Logger("Log\\logger_" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "_"));
+
+
         static void Main(string[] args)
         {
             log.EscribirCabecera();
+            //Logger log = new Logger("Log\\logger_" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "_"));
+            //comprobamos los parámetros de entrada
+            if (args.Count() > 2 || args.Count() == 1)
+            {
+                log.EscribirLog("Los argumentos de la linea de comandos son:"
+    + "HotusaLeasing.exe <fecha_inicial> <fecha_final>. Se finaliza la ejecución");
+                log.EscribirLog("o bien: HotusaLeasing.exe");
+                Environment.Exit(1);
+            }
+
+            int tipo = 0;
+
+            String strfecha1 = "";
+            String strfecha2 = "";
+
+            DateTime dtfecha1 = new DateTime();
+            DateTime dtfecha2 = new DateTime();
+
+
+            if (args.Count() == 0)
+            {
+                tipo = 1;//si es tipo == 0 se recoge la fecha que hay en el xml y se le suma 1 para hacer la consulta
+            }
+            else
+            {
+                strfecha1 = args[0];
+                strfecha2 = args[1];
+                try
+                {
+                    dtfecha1 = Convert.ToDateTime(strfecha1);
+                    dtfecha2 = Convert.ToDateTime(strfecha2);
+                }
+                catch(Exception e)
+                {
+                    log.EscribirLog("los parámetros de entrada deben de ser fechas");
+                    Environment.Exit(2);
+                }
+
+                if(dtfecha2 <= dtfecha1)
+                {
+                    log.EscribirLog("la fecha final no puede ser menor a la fecha inicial");
+                    Environment.Exit(2);
+                }
+                tipo = 2;// se utilizan las fechas de los parámetros de entrada
+            }
+
+            //leemos fichero de configuración
+            if(!File.Exists(System.Environment.CurrentDirectory + "\\configuracion\\configuracion.xml"))
+            {
+                log.EscribirLog("falta el fichero de configuración:" + System.Environment.CurrentDirectory + "\\configuracion\\configuracion.xml");
+                Environment.Exit(3);
+            }
+
+            //comproabamos que está relleno el xml con la una fecha
+            MyXml xml = new MyXml();
+            
+            if(tipo == 1)//Se utiliza la fecha del fichero xml
+            {
+                dtfecha1 = xml.leerXml();
+            }
+
+            //Leemos la info de la conexión a Tesorería
+
             XRTLIBLib.XlDatasource rr = new XRTLIBLib.XlDatasource();
             string res = rr.get("U2");
             string conres = string.Empty;
@@ -26,9 +98,21 @@ namespace HotusaLeasing
             {
                 int d = res.IndexOf(";");
                 conres = res.Substring(d + 1, res.Length - d - 1);
+            }else
+            {
+                log.EscribirLog("No se encuentra conexión a XRTLib.dll");
+                Environment.Exit(4);
             }
 
-
+            //Empieza el desarrollo
+            string iswhere = "";
+            if (tipo == 1)
+            {
+                iswhere = "where f_inicial >=" + dtfecha1;
+            }else
+            {
+                iswhere = "where f_inicial >='" + dtfecha1.ToShortDateString() + "' and f_inicial <='" + dtfecha2.ToShortDateString() + "'";
+            }
 
             SqlConnection sqlConnection1 = new System.Data.SqlClient.SqlConnection(conres);
 
@@ -138,21 +222,8 @@ namespace HotusaLeasing
         }
 
 
-        public void leerXml()
-        {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.Load("c:/personas.xml");
 
-            XmlNodeList xPersonas = xDoc.GetElementsByTagName("personas");
-            XmlNodeList xLista = ((XmlElement)xPersonas[0]).GetElementsByTagName("nombre");
 
-            foreach (XmlElement nodo in xLista)
-            {
-                string xEdad = nodo.GetAttribute("edad");
-                string xNombre = nodo.InnerText;
-
-            }
-        }
 
     }
 }

@@ -1,0 +1,7 @@
+C:\Desarrollos\hotusalearning\HotusaLeasing\HotusaLeasing\bin\Release\HotusaLeasing.exe.config
+C:\Desarrollos\hotusalearning\HotusaLeasing\HotusaLeasing\bin\Release\HotusaLeasing.exe
+C:\Desarrollos\hotusalearning\HotusaLeasing\HotusaLeasing\bin\Release\HotusaLeasing.pdb
+C:\Desarrollos\hotusalearning\HotusaLeasing\HotusaLeasing\obj\Release\HotusaLeasing.csprojAssemblyReference.cache
+C:\Desarrollos\hotusalearning\HotusaLeasing\HotusaLeasing\obj\Release\HotusaLeasing.csproj.CoreCompileInputs.cache
+C:\Desarrollos\hotusalearning\HotusaLeasing\HotusaLeasing\obj\Release\HotusaLeasing.exe
+C:\Desarrollos\hotusalearning\HotusaLeasing\HotusaLeasing\obj\Release\HotusaLeasing.pdb

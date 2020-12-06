@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Algosoft">
-      <HintPath>..\..\..\Algosoft\Algosoft\Algosoft\bin\Release\Algosoft.dll</HintPath>
-    </Reference>
     <Reference Include="Interop.XRTLIBLib">
       <HintPath>..\..\..\YodeimaExtractor\YodeimaExtractor\YodeimaExtractor\obj\Debug\Interop.XRTLIBLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -50,8 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Looger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MyXml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
