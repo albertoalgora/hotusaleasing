@@ -45,8 +45,12 @@ namespace HotusaLeasing
             XmlDocument doc = new XmlDocument();
             doc.Load(ficConfiguracion);
             XmlNode root = doc.DocumentElement;
-            XmlNode myNode = root.SelectSingleNode(nodo);
-            myNode.Value = valor;
+            //Create a new title element.
+            XmlElement elem = doc.CreateElement(nodo);
+            elem.InnerText = valor;
+            //Replace the title element.
+            root.ReplaceChild(elem, root.FirstChild);
+
             doc.Save(ficConfiguracion);
             return true;
         }

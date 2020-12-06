@@ -87,6 +87,25 @@ namespace HotusaLeasing
                 dtfecha1 = xml.leerXml();
             }
 
+
+            //Empieza el desarrollo
+            string iswhere = "";
+            if (tipo == 1)
+            {
+                iswhere = "where f_inicial >=" + (dtfecha1.AddDays(1));
+            }
+            else
+            {
+                iswhere = "where f_inicial >='" + dtfecha1.ToShortDateString() + "' and f_inicial <='" + dtfecha2.ToShortDateString() + "'";
+            }
+
+            //actualizar xml
+            if (tipo == 1)
+                xml.actualizarXml("ultima_fecha", dtfecha1.AddDays(1).ToShortDateString());
+            else
+                xml.actualizarXml("ultima_fecha", dtfecha2.ToShortDateString());
+
+
             //Leemos la info de la conexión a Tesorería
 
             XRTLIBLib.XlDatasource rr = new XRTLIBLib.XlDatasource();
@@ -104,15 +123,12 @@ namespace HotusaLeasing
                 Environment.Exit(4);
             }
 
-            //Empieza el desarrollo
-            string iswhere = "";
-            if (tipo == 1)
-            {
-                iswhere = "where f_inicial >=" + dtfecha1;
-            }else
-            {
-                iswhere = "where f_inicial >='" + dtfecha1.ToShortDateString() + "' and f_inicial <='" + dtfecha2.ToShortDateString() + "'";
-            }
+
+
+
+
+
+
 
             SqlConnection sqlConnection1 = new System.Data.SqlClient.SqlConnection(conres);
 
